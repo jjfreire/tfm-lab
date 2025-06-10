@@ -1,18 +1,20 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-import models, database, crud
 from pydantic import BaseModel, Field
 from decimal import Decimal
 from typing import List
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import HTTPException
 from tenacity import retry, stop_after_attempt, wait_fixed
+
+import models, database, crud
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://frontend:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -58,7 +60,6 @@ class ProductSalesSummary(BaseModel):
     id: int
     name: str
     total_units_sold: int
-
     class Config:
         orm_mode = True
 
@@ -77,6 +78,6 @@ def sales_summary(db: Session = Depends(get_db)):
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     db_product = db.query(models.Product).get(product_id)
     if not db_product:
-        raise HTTPException(status_code=404, detail="Producto not found")
+        raise HTTPException(status_code=404, detail="Product not found")
     db.delete(db_product)
     db.commit()
