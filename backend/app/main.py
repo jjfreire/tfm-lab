@@ -38,6 +38,7 @@ class ProductCreate(BaseModel):
     description: str = Field("", max_length=255)
     price: Decimal = Field(..., gt=0, max_digits=10, decimal_places=2)
     stock: int = Field(..., ge=0)
+    is_fragile: bool = False 
 
 class Product(ProductCreate):
     id: int

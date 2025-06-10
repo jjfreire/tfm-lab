@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, func
+from sqlalchemy import Column, Boolean, Integer, String, Numeric, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -10,6 +10,7 @@ class Product(Base):
     description = Column(String)
     price = Column(Numeric(10, 2), nullable=False)
     stock = Column(Integer, nullable=False)
+    is_fragile = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     sales = relationship("Sale", back_populates="product")

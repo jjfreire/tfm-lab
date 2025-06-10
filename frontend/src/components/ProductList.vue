@@ -45,30 +45,41 @@
           class="bg-gray-800 rounded-lg p-5 shadow flex flex-col justify-between"
         >
           <div>
-            <h3 class="text-xl font-semibold mb-1">{{ product.name }}</h3>
+            <h3 class="text-xl font-semibold mb-1 text-center">
+              {{ product.name }}
+            </h3>
             <p class="text-sm text-gray-400">{{ product.description }}</p>
+            <p
+              class="text-xs inline-flex items-center gap-1 px-2 py-0.5 rounded-full mt-1"
+              :class="product.is_fragile ? 'text-green-400 bg-green-900/30' : 'text-red-400 bg-red-900/30'"
+              :title="product.is_fragile ? 'This product is fragile' : 'This product is not fragile'"
+            >
+              {{ product.is_fragile ? '✔️' : '✖️' }}
+              {{ product.is_fragile ? 'Fragile' : 'Not fragile' }}
+            </p>
             <p class="text-lg mt-2 font-bold">
               {{ typeof product.price === 'number' ? product.price.toFixed(2) : product.price }} €
             </p>
-            <p class="text-sm">Stock: {{ product.stock }} | Vendidos: {{ product.sales ?? 0 }}</p>
+            <p class="text-sm">Stock: {{ product.stock }} | Sold: {{ product.sales ?? 0 }}</p>
           </div>
           <p class="text-sm text-green-400">
             Total sold: {{ (product.price * product.sales).toFixed(2) }} €
           </p>
-
-          <button
-            class="mt-4 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 transition"
-            :disabled="product.stock <= 0"
-            @click="sell(product.id)"
-          >
-            Sell 1
-          </button>
-          <button
-            class="mt-2 px-4 py-2 rounded bg-red-600 hover:bg-red-700 transition"
-            @click="askDeleteProduct(product)"
-          >
-            Delete
-          </button>
+          <div class="mt-4 flex flex-col gap-2">
+            <button
+              class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 transition"
+              :disabled="product.stock <= 0"
+              @click="sell(product.id)"
+            >
+              Sell 1
+            </button>
+            <button
+              class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 transition"
+              @click="askDeleteProduct(product)"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
   
@@ -101,6 +112,10 @@
             placeholder="Stock"
             required
           />
+          <label class="flex items-center space-x-2 text-sm text-white">
+            <input type="checkbox" v-model="newProduct.is_fragile" />
+            <span>Is fragile</span>
+          </label>
           <button
             type="submit"
             class="w-full bg-green-600 hover:bg-green-700 p-2 rounded text-white font-bold transition"
@@ -127,7 +142,8 @@ const newProduct = ref({
   name: '',
   description: '',
   price: null,
-  stock: null
+  stock: null,
+  is_fragile: false
 })
 
 const errorToast = ref({ show: false, message: '' })
@@ -205,7 +221,7 @@ const submitForm = async () => {
     const created = await res.json()
     created.sales = 0
     products.value.push(created)
-    newProduct.value = { name: '', description: '', price: null, stock: null }
+    newProduct.value = { name: '', description: '', price: null, stock: null, is_fragile: false }
   } else {
     const error = await res.json()
     const messages = error.detail.map(e => `• ${e.loc[1]}: ${e.msg}`).join("\n")
