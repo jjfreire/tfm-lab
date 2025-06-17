@@ -53,8 +53,6 @@ def clean_sql(sql_raw: str) -> str:
     return sql_raw.replace("```sql", "").replace("```", "").strip()
 
 def summarize_results(results, question):
-    from openai import OpenAI
-    import os
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     prompt = f"""
