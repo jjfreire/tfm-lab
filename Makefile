@@ -24,7 +24,7 @@ install:
 	make install-frontend
 
 install-backend:
-	cd backend && python -m venv venv && . venv/bin/activate && pip install -r requirements.txt
+	cd backend && python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt
 
 install-frontend:
 	cd frontend && npm install

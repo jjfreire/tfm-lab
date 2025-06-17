@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 from decimal import Decimal
 from typing import List
 from tenacity import retry, stop_after_attempt, wait_fixed
+from fastapi import Body
+from chat import generate_sql_from_question, execute_query, summarize_results, clean_sql
 
 import models, database, crud
 
@@ -82,3 +84,16 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     db.delete(db_product)
     db.commit()
+
+
+@app.post("/chat")
+def chat(query: dict = Body(...)):
+    question = query.get("question")
+    if not question:
+        raise HTTPException(status_code=400, detail="Missing 'question' field.")
+    
+    sql_query = clean_sql(generate_sql_from_question(question))
+    results = execute_query(sql_query)
+    response = summarize_results(results, question)
+    
+    return {"sql": sql_query, "response": response}

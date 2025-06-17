@@ -1,10 +1,11 @@
-# Product Catalog – Development Setup
+# Product Catalog – AI-Powered Chat Integration
 
-This project is a simple CRUD application with sales tracking:
+This project is a fullstack product catalog with CRUD operations, sales tracking, and a built-in AI assistant powered by RAG (Retrieval-Augmented Generation) to answer product-related queries.
 
 - **Frontend**: Vue 3 + Vite + TailwindCSS  
-- **Backend**: FastAPI  
-- **Database**: PostgreSQL
+- **Backend**: FastAPI + OpenAI API  
+- **Database**: PostgreSQL  
+- **AI**: Retrieval-Augmented Generation (RAG) using OpenAI and SQL-based product queries
 
 ---
 
@@ -14,6 +15,7 @@ This project is a simple CRUD application with sales tracking:
 - Python 3.11+ (for the backend)  
 - Node.js 18+ (for the frontend)  
 - GNU Make
+- OpenAI API Key
 
 ```bash
 # For Debian-based distributions:
@@ -28,6 +30,19 @@ sudo apt update && sudo apt install -y \
 
 # Install docker engine: https://docs.docker.com/engine/install/ 
 
+```
+
+Create a `.env` file inside the `backend/` folder with the following content:
+
+```env
+# backend/.env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=catalog
+DB_USER=admin
+DB_PASSWORD=admin
+
+OPENAI_API_KEY=sk-...
 ```
 
 ---
@@ -89,9 +104,12 @@ Frontend will run at [http://localhost:5173](http://localhost:5173)
 
 ## Quick Test
 
-1. Add products through the form.  
-2. Sell units using the "Sell 1" button.  
-3. Delete products using the "Delete" button.
+1. Add products using the form  
+2. Use the chat (💬 button) to ask questions about the catalog  
+3. Try:
+   - “¿Hay productos frágiles?”
+   - “¿Cuántos libros tenemos?”
+   - “Muéstrame productos que cuesten menos de 20 €”
 
 ---
 
@@ -132,3 +150,4 @@ make clean
   ```
 
 - The frontend proxies `/api` to the backend (`localhost:8000`), configured in `vite.config.js`.
+- Chat is powered by OpenAI GPT-4o via API (you need your key)
