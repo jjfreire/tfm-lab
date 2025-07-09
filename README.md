@@ -1,4 +1,4 @@
-# Product Catalog – AI-Powered Chat Integration
+# Product Catalog && AI Assistant
 
 This project is a fullstack product catalog with CRUD operations, sales tracking, and a built-in AI assistant powered by RAG (Retrieval-Augmented Generation) to answer product-related queries.
 
@@ -9,6 +9,19 @@ This project is a fullstack product catalog with CRUD operations, sales tracking
 
 ---
 
+## Project Structure
+
+```
+.
+├── backend/        # FastAPI app
+├── frontend/       # Vue 3 + Tailwind
+├── docker-compose.yml
+├── Makefile
+└── README.md
+```
+
+---
+
 ## Requirements
 
 - Docker & Docker Compose  
@@ -16,6 +29,7 @@ This project is a fullstack product catalog with CRUD operations, sales tracking
 - Node.js 18+ (for the frontend)  
 - GNU Make
 - OpenAI API Key
+- backend/.env
 
 ```bash
 # For Debian-based distributions:
@@ -32,10 +46,9 @@ sudo apt update && sudo apt install -y \
 
 ```
 
-Create a `.env` file inside the `backend/` folder with the following content:
+Create a `.env` file inside the `./backend/` folder with the following content:
 
 ```env
-# backend/.env
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=catalog
@@ -47,7 +60,7 @@ OPENAI_API_KEY=sk-...
 
 ---
 
-## Local Development (with Make)
+## Local Development
 
 Use the provided `Makefile` to streamline development tasks.
 
@@ -125,19 +138,6 @@ Stop and remove everything:
 
 ```bash
 make clean
-```
-
----
-
-## Project Structure
-
-```
-.
-├── backend/        # FastAPI app
-├── frontend/       # Vue 3 + Tailwind
-├── docker-compose.yml
-├── Makefile
-└── README.md
 ```
 
 ---
